@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Cameras and Accessories - Professional Inventory</title>
-		<link href="src/output.css" rel="stylesheet" />
+		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 	<body class="bg-[#111111] text-gray-100 overflow-x-hidden font-sans">
 		<div class="flex flex-col h-screen w-screen">
@@ -77,14 +77,12 @@
 			id="lightbox"
 			class="hidden fixed inset-0 flex-col justify-center items-center select-none p-4 bg-black/95 z-[1000] duration-300 transition-opacity"
 		>
-			<!-- Close Button -->
 			<span
 				onclick="closeLightbox()"
 				class="absolute top-5 right-8 text-white text-5xl cursor-pointer opacity-70 hover:opacity-100 transition-opacity z-[1100]"
 				>&times;</span
 			>
 
-			<!-- Navigation Arrows -->
 			<button
 				id="prev-btn"
 				onclick="changeImage(-1)"
@@ -100,7 +98,6 @@
 				&#10095;
 			</button>
 
-			<!-- Caption/Figure Style Wrapper -->
 			<div class="grid w-full max-w-5xl place-items-center">
 				<figure
 					class="relative w-full rounded-xl shadow-2xl overflow-hidden h-[70vh] lg:h-[80vh] bg-black"
@@ -112,30 +109,21 @@
 						alt="Inventory image"
 					/>
 					<figcaption
-						class="absolute bottom-8 left-1/2 -translate-x-1/2 w-[calc(100%-4rem)] flex justify-between rounded-xl border border-gray-700 py-4 px-6 shadow-2xl saturate-200 backdrop-blur-md bg-black/60"
+						class="absolute bottom-8 left-1/2 -translate-x-1/2 max-w-[90%] flex justify-center items-center rounded-xl border border-gray-700 py-3 px-6 shadow-2xl backdrop-blur-md bg-black/60"
 					>
-						<div>
-							<h5
-								id="caption-title"
-								class="text-xl font-bold text-white tracking-tight"
-							>
-								Equipment Name
-							</h5>
-							<p class="mt-1 text-gray-400 text-sm">Camera Inventory Item</p>
-						</div>
-						<div class="flex items-center">
-							<span
-								class="px-3 py-1 rounded border border-gray-600 text-xs font-bold text-gray-300 uppercase tracking-tighter"
-								>Inventory Code: OPEN</span
-							>
-						</div>
+						<h5
+							id="caption-title"
+							class="text-lg md:text-xl font-bold text-white tracking-tight text-center"
+						>
+							Equipment Name
+						</h5>
 					</figcaption>
 				</figure>
 			</div>
 		</div>
 
 		<script>
-			// Inventory data updated to match the sanitized filenames from your rename script
+			// Updated inventory list to match your exact filenames
 			const inventory = [
 				{ title: 'Olympus IS-5000', images: ['img/Olympus IS-5000.jpg'] },
 				{
@@ -200,6 +188,11 @@
 				item.images.map((src) => ({ src, title: item.title })),
 			);
 
+			function handleImageError(img, src) {
+				console.warn(`Missing image: ${src}`);
+				img.src = 'https://placehold.co/400x300/222/888?text=Image+Missing';
+			}
+
 			function renderViews() {
 				const tbody = document.getElementById('inventory-tbody');
 				const gridContainer = document.getElementById('grid-container');
@@ -212,10 +205,12 @@
 					const thumbnails = item.images
 						.map((src) => {
 							const idx = globalImgIndex++;
+							const encodedSrc = encodeURI(src);
 
 							gridItems += `
                         <div onclick="openLightbox(${idx})" class="group relative cursor-pointer">
-                            <img class="h-auto max-w-full rounded-lg shadow-sm group-hover:shadow-md transition-shadow bg-[#222]" src="${encodeURI(src)}" alt="${item.title}" onerror="this.parentElement.style.display='none'">
+                            <img class="h-auto max-w-full rounded-lg shadow-sm group-hover:shadow-md transition-shadow bg-[#222]" 
+                                 src="${encodedSrc}" alt="${item.title}" onerror="handleImageError(this, '${src}')">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-end p-4">
                                 <p class="text-white text-xs font-medium truncate">${item.title}</p>
                             </div>
@@ -223,7 +218,7 @@
 
 							return `
                         <div onclick="openLightbox(${idx})" class="w-48 h-32 rounded-xl overflow-hidden border border-gray-700 cursor-pointer hover:scale-105 hover:border-gray-400 transition-all duration-300 bg-black">
-                            <img src="${encodeURI(src)}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x100?text=No+Image'">
+                            <img src="${encodedSrc}" class="w-full h-full object-cover" onerror="handleImageError(this, '${src}')">
                         </div>`;
 						})
 						.join('');
@@ -247,16 +242,12 @@
 				document
 					.getElementById('grid-view')
 					.classList.toggle('hidden', isTable);
-
-				const activeClass =
-					'px-4 py-2 text-sm font-medium rounded-md bg-gray-700 shadow-sm transition-all text-white';
-				const inactiveClass =
-					'px-4 py-2 text-sm font-medium rounded-md transition-all text-gray-400 hover:text-gray-200';
-
+				const active = 'bg-gray-700 text-white';
+				const inactive = 'text-gray-400 hover:text-gray-200';
 				document.getElementById('table-toggle').className =
-					isTable ? activeClass : inactiveClass;
+					`px-4 py-2 text-sm font-medium rounded-md transition-all ${isTable ? active : inactive}`;
 				document.getElementById('grid-toggle').className =
-					!isTable ? activeClass : inactiveClass;
+					`px-4 py-2 text-sm font-medium rounded-md transition-all ${!isTable ? active : inactive}`;
 			};
 
 			let currentIdx = 0;
@@ -281,12 +272,7 @@
 			function updateLightbox() {
 				const { src, title } = allImages[currentIdx];
 				lightboxImg.src = encodeURI(src);
-				lightboxImg.onerror = () => {
-					lightboxImg.src = 'https://placehold.co/800x600?text=Image+Not+Found';
-				};
 				captionTitle.textContent = title;
-
-				// Handle non-looping logic
 				prevBtn.disabled = currentIdx === 0;
 				nextBtn.disabled = currentIdx === allImages.length - 1;
 			}
@@ -301,17 +287,10 @@
 
 			document.addEventListener('keydown', (e) => {
 				if (lightbox.classList.contains('flex')) {
-					if (e.key === 'Escape') {
-						e.preventDefault(); // Safety check for browser behaviors
-						window.closeLightbox();
-					}
+					if (e.key === 'Escape') window.closeLightbox();
 					if (e.key === 'ArrowRight') window.changeImage(1);
 					if (e.key === 'ArrowLeft') window.changeImage(-1);
 				}
-			});
-
-			lightbox.addEventListener('click', (e) => {
-				if (e.target === lightbox) window.closeLightbox();
 			});
 
 			renderViews();
