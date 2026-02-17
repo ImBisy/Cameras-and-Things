@@ -135,69 +135,64 @@
 		</div>
 
 		<script>
+			// Updated inventory with sanitized paths matching your asset list
 			const inventory = [
-				{ title: 'Olympus IS-5000', images: ['img/Olympus%20IS-5000.jpg'] },
+				{ title: 'Olympus IS-5000', images: ['img/Olympus IS-5000.jpg'] },
 				{
 					title: 'Powershot G10 (x2)',
 					images: [
-						'img/Powershot%20G10%20(x2).jpg',
-						'img/Powershot%20G10%20(x2)_2.jpg',
+						'img/Powershot G10 (x2).jpg',
+						'img/Powershot G10 (x2)_2.jpg',
 					],
 				},
-				{ title: 'Sony Cybershot', images: ['img/Sony%20Cybershot.jpg'] },
+				{ title: 'Sony Cybershot', images: ['img/Sony Cybershot.jpg'] },
 				{
 					title: 'Brons Wide Conversion Lens 0.42x for Sony TR',
-					images: [
-						'img/Brons%20Wide%20Conversion%20Lens%200%2042x%20for%20Sony%20TR.jpg',
-					],
+					images: ['img/Brons Wide Conversion Lens 0 42x for Sony TR.jpg'],
 				},
 				{
 					title: 'Y.I.C AUX. Telephoto Lens for L35AF',
-					images: ['img/Y%20I%20C%20AUX%20Telephoto%20Lens%20for%20L35AF.jpg'],
+					images: ['img/Y I C AUX Telephoto Lens for L35AF.jpg'],
 				},
 				{
 					title: 'Y.I.C AUX. Wideangle Lens for L35AF',
-					images: ['img/Y%20I%20C%20AUX%20Wideangle%20Lens%20for%20L35AF.jpg'],
+					images: ['img/Y I C AUX Wideangle Lens for L35AF.jpg'],
 				},
 				{
 					title: 'Leica Angle Finder M',
-					images: ['img/Leica%20Angle%20Finder%20M.jpg'],
+					images: ['img/Leica Angle Finder M.jpg'],
 				},
 				{
 					title: 'Leica Summicron-M 1:2/90',
-					images: ['img/Leica%20Summicron-M%201%202%2090.jpg'],
+					images: ['img/Leica Summicron-M 1 2 90.jpg'],
 				},
 				{
 					title: 'Leica Summilux-M 1:1.4/50 ASPH.',
-					images: ['img/Leica%20Summilux-M%201%201%204%2050%20ASPH.jpg'],
+					images: ['img/Leica Summilux-M 1 1 4 50 ASPH.jpg'],
 				},
 				{
 					title: 'Leica Macro-Elmar-M 1:4/90',
-					images: ['img/Leica%20Macro-Elmar-M%201%204%2090.jpg'],
+					images: ['img/Leica Macro-Elmar-M 1 4 90.jpg'],
 				},
 				{
 					title: 'Leica Elmarit-M 1:2.8/21 ASPH.',
-					images: ['img/Leica%20Elmarit-M%201%202%208%2021%20ASPH.jpg'],
+					images: ['img/Leica Elmarit-M 1 2 8 21 ASPH.jpg'],
 				},
 				{
 					title: 'Leica Universal Polarising Filter M',
-					images: ['img/Leica%20Universal%20Polarising%20Filter%20M.jpg'],
+					images: ['img/Leica Universal Polarising Filter M.jpg'],
 				},
 				{
 					title: 'Leica E39 Adapter for Universal Polariser',
-					images: [
-						'img/Leica%20E39%20Adapter%20for%20Universal%20Polariser.jpg',
-					],
+					images: ['img/Leica E39 Adapter for Universal Polariser.jpg'],
 				},
 				{
 					title: 'B+W 67mm Slim 486 UV/IR Cut MRC Filter',
-					images: [
-						'img/B+W%2067mm%20Slim%20486%20UV%20IR%20Cut%20MRC%20Filter.jpg',
-					],
+					images: ['img/B+W 67mm Slim 486 UV IR Cut MRC Filter.jpg'],
 				},
 				{
 					title: 'Leica E46 UV/IR Filter',
-					images: ['img/Leica%20E46%20UV%20IR%20Filter.jpg'],
+					images: ['img/Leica E46 UV IR Filter.jpg'],
 				},
 			];
 
@@ -220,7 +215,7 @@
 
 							gridItems += `
                         <div onclick="openLightbox(${idx})" class="group relative cursor-pointer">
-                            <img class="h-auto max-w-full rounded-lg shadow-sm group-hover:shadow-md transition-shadow bg-[#222]" src="${src}" alt="${item.title}" onerror="this.parentElement.style.display='none'">
+                            <img class="h-auto max-w-full rounded-lg shadow-sm group-hover:shadow-md transition-shadow bg-[#222]" src="${encodeURI(src)}" alt="${item.title}" onerror="this.parentElement.style.display='none'">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-end p-4">
                                 <p class="text-white text-xs font-medium truncate">${item.title}</p>
                             </div>
@@ -228,7 +223,7 @@
 
 							return `
                         <div onclick="openLightbox(${idx})" class="w-48 h-32 rounded-xl overflow-hidden border border-gray-700 cursor-pointer hover:scale-105 hover:border-gray-400 transition-all duration-300 bg-black">
-                            <img src="${src}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x100?text=No+Image'">
+                            <img src="${encodeURI(src)}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x100?text=No+Image'">
                         </div>`;
 						})
 						.join('');
@@ -285,13 +280,12 @@
 
 			function updateLightbox() {
 				const { src, title } = allImages[currentIdx];
-				lightboxImg.src = src;
+				lightboxImg.src = encodeURI(src);
 				lightboxImg.onerror = () => {
 					lightboxImg.src = 'https://placehold.co/800x600?text=Image+Not+Found';
 				};
 				captionTitle.textContent = title;
 
-				// Disable buttons at boundaries to prevent looping
 				prevBtn.disabled = currentIdx === 0;
 				nextBtn.disabled = currentIdx === allImages.length - 1;
 			}
@@ -307,15 +301,11 @@
 			document.addEventListener('keydown', (e) => {
 				if (lightbox.classList.contains('flex')) {
 					if (e.key === 'Escape') {
-						e.preventDefault(); // Prevents browser actions like exiting fullscreen/window closure
+						e.preventDefault();
 						window.closeLightbox();
 					}
-					if (e.key === 'ArrowRight') {
-						window.changeImage(1);
-					}
-					if (e.key === 'ArrowLeft') {
-						window.changeImage(-1);
-					}
+					if (e.key === 'ArrowRight') window.changeImage(1);
+					if (e.key === 'ArrowLeft') window.changeImage(-1);
 				}
 			});
 
