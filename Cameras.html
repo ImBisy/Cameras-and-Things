@@ -135,7 +135,7 @@
 		</div>
 
 		<script>
-			// Updated inventory with sanitized paths matching your asset list
+			// Inventory data updated to match the sanitized filenames from your rename script
 			const inventory = [
 				{ title: 'Olympus IS-5000', images: ['img/Olympus IS-5000.jpg'] },
 				{
@@ -286,6 +286,7 @@
 				};
 				captionTitle.textContent = title;
 
+				// Handle non-looping logic
 				prevBtn.disabled = currentIdx === 0;
 				nextBtn.disabled = currentIdx === allImages.length - 1;
 			}
@@ -301,7 +302,7 @@
 			document.addEventListener('keydown', (e) => {
 				if (lightbox.classList.contains('flex')) {
 					if (e.key === 'Escape') {
-						e.preventDefault();
+						e.preventDefault(); // Safety check for browser behaviors
 						window.closeLightbox();
 					}
 					if (e.key === 'ArrowRight') window.changeImage(1);
