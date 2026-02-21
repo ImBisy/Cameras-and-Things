@@ -1,0 +1,26 @@
+{
+	"name": "cameras-and-things",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "tailwindcss -i ./input.css -o ./output.css",
+		"watch": "tailwindcss -i ./input.css -o ./output.css --watch",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ImBisy/Cameras-and-Things.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs",
+	"bugs": {
+		"url": "https://github.com/ImBisy/Cameras-and-Things/issues"
+	},
+	"homepage": "https://github.com/ImBisy/Cameras-and-Things#readme",
+	"devDependencies": {
+		"tailwindcss": "^4.2.0"
+	}
+}

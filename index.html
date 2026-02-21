@@ -4,13 +4,13 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Cameras and Accessories - Professional Inventory</title>
-		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="./output.css" />
 	</head>
-	<body class="bg-[#111111] text-gray-100 overflow-x-hidden font-sans">
+	<body class="bg-gray-900 text-gray-100 overflow-x-hidden font-sans">
 		<div class="flex flex-col h-screen w-screen">
 			<!-- Header -->
 			<header
-				class="py-6 px-8 border-b border-gray-800 bg-[#111111] flex-shrink-0 flex justify-between items-center"
+				class="py-6 px-8 border-b border-gray-800 bg-gray-900 flex-shrink-0 flex justify-between items-center"
 			>
 				<h1 class="text-2xl font-bold tracking-tight text-white uppercase">
 					Cameras and Accessories Catalog
@@ -37,13 +37,13 @@
 			<div class="flex-grow overflow-auto w-full">
 				<!-- Table View -->
 				<div id="table-view" class="w-full overflow-x-auto">
-					<table class="w-full border-collapse table-fixed min-w-[600px]">
+					<table class="w-full border-collapse table-fixed min-w-2xl">
 						<thead
-							class="sticky top-0 z-10 bg-[#1a1a1a] border-b border-gray-800"
+							class="sticky top-0 z-10 bg-gray-800 border-b border-gray-800"
 						>
 							<tr>
 								<th
-									class="w-80 text-left py-4 px-6 text-xs uppercase tracking-widest text-gray-400 font-bold"
+									class="w-96 text-left py-4 px-6 text-xs uppercase tracking-widest text-gray-400 font-bold"
 								>
 									Preview Images
 								</th>
@@ -75,32 +75,32 @@
 		<!-- Lightbox Modal -->
 		<div
 			id="lightbox"
-			class="hidden fixed inset-0 flex-col justify-center items-center select-none p-4 bg-black/95 z-[1000] duration-300 transition-opacity"
+			class="hidden fixed inset-0 flex-col justify-center items-center select-none p-4 bg-black/95 z-50 duration-300 transition-opacity"
 		>
 			<span
 				onclick="closeLightbox()"
-				class="absolute top-5 right-8 text-white text-5xl cursor-pointer opacity-70 hover:opacity-100 transition-opacity z-[1100]"
+				class="absolute top-5 right-8 text-white text-5xl cursor-pointer opacity-70 hover:opacity-100 transition-opacity z-50"
 				>&times;</span
 			>
 
 			<button
 				id="prev-btn"
 				onclick="changeImage(-1)"
-				class="absolute left-5 top-1/2 -translate-y-1/2 text-white text-6xl px-4 opacity-50 hover:opacity-100 transition-opacity z-[1100] disabled:opacity-5 disabled:cursor-not-allowed"
+				class="absolute left-5 top-1/2 -translate-y-1/2 text-white text-6xl px-4 opacity-50 hover:opacity-100 transition-opacity z-50 disabled:opacity-5 disabled:cursor-not-allowed"
 			>
 				&#10094;
 			</button>
 			<button
 				id="next-btn"
 				onclick="changeImage(1)"
-				class="absolute right-5 top-1/2 -translate-y-1/2 text-white text-6xl px-4 opacity-50 hover:opacity-100 transition-opacity z-[1100] disabled:opacity-5 disabled:cursor-not-allowed"
+				class="absolute right-5 top-1/2 -translate-y-1/2 text-white text-6xl px-4 opacity-50 hover:opacity-100 transition-opacity z-50 disabled:opacity-5 disabled:cursor-not-allowed"
 			>
 				&#10095;
 			</button>
 
 			<div class="grid w-full max-w-5xl place-items-center">
 				<figure
-					class="relative w-full rounded-xl shadow-2xl overflow-hidden h-[70vh] lg:h-[80vh] bg-black"
+					class="relative w-full rounded-xl shadow-2xl overflow-hidden h-96 lg:h-screen max-h-screen bg-black"
 				>
 					<img
 						id="lightbox-img"
@@ -109,7 +109,7 @@
 						alt="Inventory image"
 					/>
 					<figcaption
-						class="absolute bottom-8 left-1/2 -translate-x-1/2 max-w-[90%] flex justify-center items-center rounded-xl border border-gray-700 py-3 px-6 shadow-2xl backdrop-blur-md bg-black/60"
+						class="absolute bottom-8 left-1/2 -translate-x-1/2 max-w-5xl flex justify-center items-center rounded-xl border border-gray-700 py-3 px-6 shadow-2xl backdrop-blur-md bg-black/60"
 					>
 						<h5
 							id="caption-title"
@@ -209,7 +209,7 @@
 
 							gridItems += `
                         <div onclick="openLightbox(${idx})" class="group relative cursor-pointer">
-                            <img class="h-auto max-w-full rounded-lg shadow-sm group-hover:shadow-md transition-shadow bg-[#222]" 
+                            <img class="h-auto max-w-full rounded-lg shadow-sm group-hover:shadow-md transition-shadow bg-gray-800" 
                                  src="${encodedSrc}" alt="${item.title}" onerror="handleImageError(this, '${src}')">
                             <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-end p-4">
                                 <p class="text-white text-xs font-medium truncate">${item.title}</p>
