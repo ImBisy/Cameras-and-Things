@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "npx tailwindcss -i ./input.css -o ./output.css",
-		"build:production": "npx tailwindcss -i ./input.css -o ./output.css --minify",
-		"watch": "npx tailwindcss -i ./input.css -o ./output.css --watch",
+		"build": "npx @tailwindcss/cli -i ./input.css -o ./output.css",
+		"build:production": "npx @tailwindcss/cli -i ./input.css -o ./output.css --minify",
+		"watch": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -22,6 +22,7 @@
 	},
 	"homepage": "https://github.com/ImBisy/Cameras-and-Things#readme",
 	"devDependencies": {
+		"@tailwindcss/cli": "^4.2.0",
 		"tailwindcss": "^4.2.0"
 	}
 }
