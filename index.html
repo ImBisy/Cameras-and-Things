@@ -125,62 +125,121 @@
 		<script>
 			// Updated inventory list to match your exact filenames
 			const inventory = [
-				{ title: 'Olympus IS-5000', images: ['img/Olympus IS-5000.jpg'] },
 				{
-					title: 'Powershot G10 (x2)',
+					title: 'smc PENTAX Q 01 Standard Prime 8.5mm F1.9 AL [IF]',
+					images: ['img/smc PENTAX Q 01 Standard Prime 8.5mm F1.9 AL [IF].png'],
+				},
+				{
+					title: 'PENTAX Q 04 Toy Lens Wide 6.3mm F7.1',
+					images: ['img/PENTAX Q 04 Toy Lens Wide 6.3mm F7.1.png'],
+				},
+				{
+					title: 'smc PENTAX Q 02 Standard Zoom 5-15mm F2.8-4.5 ED AL [IF]',
 					images: [
-						'img/Powershot G10 (x2).jpg',
-						'img/Powershot G10 (x2)_2.jpg',
+						'img/smc PENTAX Q 02 Standard Zoom 5-15mm F2.8-4.5 ED AL [IF].png',
 					],
 				},
-				{ title: 'Sony Cybershot', images: ['img/Sony Cybershot.jpg'] },
+				{
+					title: 'Hasselblad XCD 35-75mm f/3.5-4.5',
+					images: ['img/Hasselblad XCD 35-75mm f-3.5-4.5.png'],
+				},
+				{
+					title: 'Hasselblad XCD 45mm f/3.5',
+					images: ['img/Hasselblad XCD 45mm f-3.5.png'],
+				},
+				{
+					title: 'Hasselblad XCD 30mm f/3.5',
+					images: ['img/Hasselblad XCD 30mm f-3.5.png'],
+				},
+				{
+					title: 'Canon RF 600mm F11 IS STM',
+					images: ['img/Canon RF 600mm F11 IS STM.png'],
+				},
+				{
+					title: 'Hasselblad 907X camera body',
+					images: ['img/Hasselblad 907X camera body.png'],
+				},
+				{
+					title: 'Hasselblad X1D (X1D-50c) camera body',
+					images: ['img/Hasselblad X1D (X1D-50c) camera body.png'],
+				},
+				{
+					title: 'Olympus IS-5000 35mm Bridge Camera',
+					images: ['img/Olympus IS-5000 35mm Bridge Camera.png'],
+				},
+				{
+					title: 'Canon PowerShot G10',
+					images: [
+						'img/Canon PowerShot G10.png',
+						'img/Canon PowerShot G10 (2).png',
+					],
+				},
+				{
+					title:
+						'Sony Cyber-shot digital camera (YIC variant, exact DSC-model unknown)',
+					images: [
+						'img/Sony Cyber-shot digital camera (YIC variant, exact DSC-model unknown).png',
+					],
+				},
+				{
+					title: 'Canon TELE CONVERTER TC-DC58C 2.0x',
+					images: ['img/Canon TELE CONVERTER TC-DC58C 2.0x.png'],
+				},
 				{
 					title: 'Brons Wide Conversion Lens 0.42x for Sony TR',
-					images: ['img/Brons Wide Conversion Lens 0 42x for Sony TR.jpg'],
+					images: ['img/Brons Wide Conversion Lens 0.42x for Sony TR.png'],
 				},
 				{
-					title: 'Y.I.C AUX. Telephoto Lens for L35AF',
-					images: ['img/Y I C AUX Telephoto Lens for L35AF.jpg'],
+					title:
+						'Auxiliary telephoto lens for Nikon L35AF (brand/model not specified)',
+					images: [
+						'img/Auxiliary telephoto lens for Nikon L35AF (brand-model not specified).png',
+					],
 				},
 				{
-					title: 'Y.I.C AUX. Wideangle Lens for L35AF',
-					images: ['img/Y I C AUX Wideangle Lens for L35AF.jpg'],
+					title:
+						'Auxiliary wide-angle lens for Nikon L35AF (brand/model not specified)',
+					images: [
+						'img/Auxiliary wide-angle lens for Nikon L35AF (brand-model not specified).png',
+					],
 				},
 				{
-					title: 'Leica Angle Finder M',
-					images: ['img/Leica Angle Finder M.jpg'],
+					title: 'Leica Anglefinder M (Anglefinder M, 12531)',
+					images: ['img/Leica Anglefinder M (Anglefinder M, 12531).png'],
 				},
 				{
-					title: 'Leica Summicron-M 1:2/90',
-					images: ['img/Leica Summicron-M 1 2 90.jpg'],
+					title: 'Leica Summicron-M 90mm f/2 E55',
+					images: ['img/Leica Summicron-M 90mm f-2 E55.png'],
 				},
 				{
-					title: 'Leica Summilux-M 1:1.4/50 ASPH.',
-					images: ['img/Leica Summilux-M 1 1 4 50 ASPH.jpg'],
+					title: 'Leica Summilux-M 50mm f/1.4 ASPH. E46',
+					images: ['img/Leica Summilux-M 50mm f-1.4 ASPH. E46.png'],
 				},
 				{
-					title: 'Leica Macro-Elmar-M 1:4/90',
-					images: ['img/Leica Macro-Elmar-M 1 4 90.jpg'],
+					title: 'Leica Macro-Elmar-M 90mm f/4 E39',
+					images: ['img/Leica Macro-Elmar-M 90mm f-4 E39.png'],
 				},
 				{
-					title: 'Leica Elmarit-M 1:2.8/21 ASPH.',
-					images: ['img/Leica Elmarit-M 1 2 8 21 ASPH.jpg'],
+					title: 'Leica Elmarit-M 21mm f/2.8 ASPH. E55',
+					images: ['img/Leica Elmarit-M 21mm f-2.8 ASPH. E55.png'],
 				},
 				{
 					title: 'Leica Universal Polarising Filter M',
-					images: ['img/Leica Universal Polarising Filter M.jpg'],
+					images: ['img/Leica Universal Polarising Filter M.png'],
 				},
 				{
-					title: 'Leica E39 Adapter for Universal Polariser',
-					images: ['img/Leica E39 Adapter for Universal Polariser.jpg'],
+					title: 'Leica E39 Adapter for Universal Polarising Filter M',
+					images: [
+						'img/Leica E39 Adapter for Universal Polarising Filter M.png',
+					],
 				},
 				{
-					title: 'B+W 67mm Slim 486 UV/IR Cut MRC Filter',
-					images: ['img/B+W 67mm Slim 486 UV IR Cut MRC Filter.jpg'],
+					title: 'B+W 67mm 486 UV/IR Cut MRC Filter',
+					images: ['img/B+W 67mm 486 UV-IR Cut MRC Filter.png'],
 				},
 				{
-					title: 'Leica E46 UV/IR Filter',
-					images: ['img/Leica E46 UV IR Filter.jpg'],
+					title: 'Leica UV/IR Filter E46',
+					images: ['img/Leica UV-IR Filter E46.png'],
 				},
 			];
 
