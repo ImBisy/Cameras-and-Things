@@ -3,30 +3,279 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="Professional camera equipment inventory - Hasselblad, Leica, Canon, Pentax, and more"
+		/>
 		<title>Cameras and Accessories - Professional Inventory</title>
-		<link rel="stylesheet" href="./output.css" />
+		<style>
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				background-color: rgb(17, 24, 39);
+				color: rgb(243, 244, 246);
+				font-family:
+					system-ui,
+					-apple-system,
+					BlinkMacSystemFont,
+					'Segoe UI',
+					sans-serif;
+				line-height: 1.5;
+			}
+			/* Skeleton Loading Animation */
+			@keyframes shimmer {
+				0% {
+					background-position: -200% 0;
+				}
+				100% {
+					background-position: 200% 0;
+				}
+			}
+			.skeleton {
+				background: linear-gradient(
+					90deg,
+					rgb(31, 41, 55) 25%,
+					rgb(55, 65, 81) 50%,
+					rgb(31, 41, 55) 75%
+				);
+				background-size: 200% 100%;
+				animation: shimmer 1.5s infinite;
+				border-radius: 0.5rem;
+			}
+			/* Toggle Styles */
+			.table-toggle-active {
+				background-color: rgb(55, 65, 81);
+				color: rgb(255, 255, 255);
+			}
+			.table-toggle-inactive {
+				color: rgb(156, 163, 175);
+				background: transparent;
+			}
+			.table-toggle-inactive:hover {
+				color: rgb(229, 231, 235);
+			}
+			/* Row Hover */
+			.inventory-row:hover {
+				background-color: #1a1a1a;
+			}
+			/* Grid Item Effects */
+			.grid-item {
+				position: relative;
+				cursor: pointer;
+				overflow: hidden;
+				border-radius: 0.5rem;
+				background-color: rgb(31, 41, 55);
+				aspect-ratio: 4/3;
+			}
+			.grid-item img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				transition: transform 200ms ease;
+			}
+			.grid-item:hover img {
+				transform: scale(1.05);
+			}
+			.grid-item:hover {
+				box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+			}
+			.grid-overlay {
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(
+					to top,
+					rgb(0 0 0 / 0.8) 0%,
+					transparent 50%
+				);
+				opacity: 0;
+				transition: opacity 150ms ease;
+				display: flex;
+				align-items: flex-end;
+				padding: 1rem;
+			}
+			.grid-item:hover .grid-overlay {
+				opacity: 1;
+			}
+			/* Thumbnail Styles */
+			.thumbnail {
+				width: 12rem;
+				height: 8rem;
+				border-radius: 0.75rem;
+				overflow: hidden;
+				border: 1px solid rgb(55, 65, 81);
+				cursor: pointer;
+				transition: all 200ms ease;
+				background-color: rgb(31, 41, 55);
+				flex-shrink: 0;
+			}
+			.thumbnail img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			.thumbnail:hover {
+				transform: scale(1.03);
+				border-color: rgb(156, 163, 175);
+			}
+			/* Image Fade In */
+			.img-fade {
+				opacity: 0;
+				transition: opacity 300ms ease;
+			}
+			.img-fade.loaded {
+				opacity: 1;
+			}
+			/* Lightbox Styles */
+			.lightbox-close {
+				position: absolute;
+				top: 1.25rem;
+				right: 2rem;
+				color: rgb(255, 255, 255);
+				font-size: 3rem;
+				line-height: 1;
+				cursor: pointer;
+				opacity: 0.7;
+				transition: opacity 150ms ease;
+				z-index: 50;
+				background: none;
+				border: none;
+				padding: 0;
+			}
+			.lightbox-close:hover {
+				opacity: 1;
+			}
+			.lightbox-btn {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				color: rgb(255, 255, 255);
+				font-size: 3rem;
+				line-height: 1;
+				padding: 0.5rem 1rem;
+				opacity: 0.5;
+				transition: opacity 150ms ease;
+				z-index: 50;
+				background: none;
+				border: none;
+				cursor: pointer;
+			}
+			.lightbox-btn:hover {
+				opacity: 1;
+			}
+			.lightbox-btn:disabled {
+				opacity: 0.1;
+				cursor: not-allowed;
+			}
+			#prev-btn {
+				left: 1rem;
+			}
+			#next-btn {
+				right: 1rem;
+			}
+			/* Loading Spinner */
+			.spinner {
+				position: absolute;
+				inset: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.spinner::after {
+				content: '';
+				width: 40px;
+				height: 40px;
+				border: 3px solid rgb(55, 65, 81);
+				border-top-color: rgb(255, 255, 255);
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+			}
+			@keyframes spin {
+				to {
+					transform: rotate(360deg);
+				}
+			}
+		</style>
 	</head>
-	<body class="bg-gray-900 text-gray-100 overflow-x-hidden font-sans">
-		<div class="flex flex-col h-screen w-screen">
+	<body>
+		<div
+			style="
+				display: flex;
+				flex-direction: column;
+				height: 100vh;
+				width: 100vw;
+				overflow: hidden;
+			"
+		>
 			<!-- Header -->
 			<header
-				class="py-6 px-8 border-b border-gray-800 bg-gray-900 flex-shrink-0 flex justify-between items-center"
+				style="
+					padding: 1rem 1.5rem;
+					border-bottom: 1px solid rgb(31, 41, 55);
+					background-color: rgb(17, 24, 39);
+					flex-shrink: 0;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					gap: 1rem;
+				"
 			>
-				<h1 class="text-2xl font-bold tracking-tight text-white uppercase">
-					Cameras and Accessories Catalog
+				<h1
+					style="
+						font-size: 1.25rem;
+						font-weight: 700;
+						letter-spacing: -0.025em;
+						color: rgb(255, 255, 255);
+						text-transform: uppercase;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					"
+				>
+					Cameras and Accessories
 				</h1>
-				<div class="flex bg-gray-800 p-1 rounded-lg">
+				<div
+					style="
+						display: flex;
+						background-color: rgb(31, 41, 55);
+						padding: 0.25rem;
+						border-radius: 0.5rem;
+						flex-shrink: 0;
+					"
+				>
 					<button
 						onclick="setView('table')"
 						id="table-toggle"
-						class="px-4 py-2 text-sm font-medium rounded-md bg-gray-700 shadow-sm transition-all text-white"
+						class="table-toggle table-toggle-active"
+						style="
+							padding: 0.5rem 1rem;
+							font-size: 0.875rem;
+							font-weight: 500;
+							border-radius: 0.375rem;
+							border: none;
+							cursor: pointer;
+							transition: all 150ms ease;
+							white-space: nowrap;
+						"
 					>
 						Table
 					</button>
 					<button
 						onclick="setView('grid')"
 						id="grid-toggle"
-						class="px-4 py-2 text-sm font-medium rounded-md text-gray-400 hover:text-gray-200 transition-all"
+						class="table-toggle table-toggle-inactive"
+						style="
+							padding: 0.5rem 1rem;
+							font-size: 0.875rem;
+							font-weight: 500;
+							border-radius: 0.375rem;
+							border: none;
+							cursor: pointer;
+							transition: all 150ms ease;
+							white-space: nowrap;
+						"
 					>
 						Grid
 					</button>
@@ -34,39 +283,80 @@
 			</header>
 
 			<!-- Main Content Area -->
-			<div class="flex-grow overflow-auto w-full">
+			<div
+				style="flex-grow: 1; overflow: auto; width: 100%; position: relative"
+			>
 				<!-- Table View -->
-				<div id="table-view" class="w-full overflow-x-auto">
-					<table class="w-full border-collapse table-fixed min-w-2xl">
+				<div
+					id="table-view"
+					style="width: 100%; overflow-x: auto; display: block"
+				>
+					<table
+						style="
+							width: 100%;
+							border-collapse: collapse;
+							table-layout: fixed;
+							min-width: 42rem;
+						"
+					>
 						<thead
-							class="sticky top-0 z-10 bg-gray-800 border-b border-gray-800"
+							style="
+								position: sticky;
+								top: 0;
+								z-index: 10;
+								background-color: rgb(31, 41, 55);
+							"
 						>
-							<tr>
+							<tr style="border-bottom: 1px solid rgb(31, 41, 55)">
 								<th
-									class="w-96 text-left py-4 px-6 text-xs uppercase tracking-widest text-gray-400 font-bold"
+									style="
+										width: 24rem;
+										text-align: left;
+										padding: 1rem 1.5rem;
+										font-size: 0.75rem;
+										text-transform: uppercase;
+										letter-spacing: 0.1em;
+										color: rgb(156, 163, 175);
+										font-weight: 700;
+									"
 								>
-									Preview Images
+									Preview
 								</th>
 								<th
-									class="text-left py-4 px-6 text-xs uppercase tracking-widest text-gray-400 font-bold"
+									style="
+										text-align: left;
+										padding: 1rem 1.5rem;
+										font-size: 0.75rem;
+										text-transform: uppercase;
+										letter-spacing: 0.1em;
+										color: rgb(156, 163, 175);
+										font-weight: 700;
+									"
 								>
-									Equipment Title
+									Equipment
 								</th>
 							</tr>
 						</thead>
-						<tbody id="inventory-tbody" class="divide-y divide-gray-800">
-							<!-- Items mapped below -->
+						<tbody
+							id="inventory-tbody"
+							style="border-top: 1px solid rgb(31, 41, 55)"
+						>
+							<!-- Items injected here -->
 						</tbody>
 					</table>
 				</div>
 
 				<!-- Grid View -->
-				<div id="grid-view" class="hidden p-8">
+				<div id="grid-view" style="display: none; padding: 1.5rem">
 					<div
-						class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
 						id="grid-container"
+						style="
+							display: grid;
+							grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+							gap: 1rem;
+						"
 					>
-						<!-- Grid items will be injected here -->
+						<!-- Grid items injected here -->
 					</div>
 				</div>
 			</div>
@@ -75,45 +365,104 @@
 		<!-- Lightbox Modal -->
 		<div
 			id="lightbox"
-			class="hidden fixed inset-0 flex-col justify-center items-center select-none p-4 bg-black/95 z-50 duration-300 transition-opacity"
+			style="
+				display: none;
+				position: fixed;
+				inset: 0;
+				background-color: rgb(0, 0, 0);
+				z-index: 50;
+				opacity: 0;
+				transition: opacity 200ms ease;
+			"
+			onclick="if (event.target === this) closeLightbox();"
 		>
-			<span
+			<button
+				class="lightbox-close"
 				onclick="closeLightbox()"
-				class="absolute top-5 right-8 text-white text-5xl cursor-pointer opacity-70 hover:opacity-100 transition-opacity z-50"
-				>&times;</span
+				aria-label="Close"
 			>
-
+				&times;
+			</button>
 			<button
 				id="prev-btn"
+				class="lightbox-btn"
 				onclick="changeImage(-1)"
-				class="absolute left-5 top-1/2 -translate-y-1/2 text-white text-6xl px-4 opacity-50 hover:opacity-100 transition-opacity z-50 disabled:opacity-5 disabled:cursor-not-allowed"
+				aria-label="Previous"
 			>
 				&#10094;
 			</button>
 			<button
 				id="next-btn"
+				class="lightbox-btn"
 				onclick="changeImage(1)"
-				class="absolute right-5 top-1/2 -translate-y-1/2 text-white text-6xl px-4 opacity-50 hover:opacity-100 transition-opacity z-50 disabled:opacity-5 disabled:cursor-not-allowed"
+				aria-label="Next"
 			>
 				&#10095;
 			</button>
 
-			<div class="grid w-full max-w-5xl place-items-center">
+			<div
+				style="
+					position: absolute;
+					inset: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					padding: 4rem 6rem;
+				"
+			>
 				<figure
-					class="relative w-full rounded-xl shadow-2xl overflow-hidden h-96 lg:h-screen max-h-screen bg-black"
+					style="
+						position: relative;
+						max-width: 100%;
+						max-height: 100%;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+					"
 				>
-					<img
-						id="lightbox-img"
-						class="object-contain w-full h-full"
-						src=""
-						alt="Inventory image"
-					/>
+					<div
+						style="
+							position: relative;
+							background-color: rgb(0, 0, 0);
+							border-radius: 0.5rem;
+							overflow: hidden;
+						"
+					>
+						<div
+							id="lightbox-spinner"
+							class="spinner"
+							style="display: none"
+						></div>
+						<img
+							id="lightbox-img"
+							style="
+								max-width: 80vw;
+								max-height: 70vh;
+								object-fit: contain;
+								opacity: 0;
+								transition: opacity 200ms ease;
+							"
+							alt="Equipment"
+						/>
+					</div>
 					<figcaption
-						class="absolute bottom-8 left-1/2 -translate-x-1/2 max-w-5xl flex justify-center items-center rounded-xl border border-gray-700 py-3 px-6 shadow-2xl backdrop-blur-md bg-black/60"
+						style="
+							margin-top: 1rem;
+							padding: 0.75rem 1.5rem;
+							background-color: rgb(31, 41, 55);
+							border-radius: 0.5rem;
+							max-width: 600px;
+						"
 					>
 						<h5
 							id="caption-title"
-							class="text-lg md:text-xl font-bold text-white tracking-tight text-center"
+							style="
+								font-size: 1rem;
+								font-weight: 600;
+								color: rgb(255, 255, 255);
+								text-align: center;
+								line-height: 1.4;
+							"
 						>
 							Equipment Name
 						</h5>
@@ -123,135 +472,160 @@
 		</div>
 
 		<script>
-			// Updated inventory list to match your exact filenames
+			// Optimized inventory data
 			const inventory = [
 				{
 					title: 'smc PENTAX Q 01 Standard Prime 8.5mm F1.9 AL [IF]',
-					images: ['img/smc PENTAX Q 01 Standard Prime 8.5mm F1.9 AL [IF].png'],
+					images: ['smc PENTAX Q 01 Standard Prime 8.5mm F1.9 AL [IF]'],
 				},
 				{
 					title: 'PENTAX Q 04 Toy Lens Wide 6.3mm F7.1',
-					images: ['img/PENTAX Q 04 Toy Lens Wide 6.3mm F7.1.png'],
+					images: ['PENTAX Q 04 Toy Lens Wide 6.3mm F7.1'],
 				},
 				{
 					title: 'smc PENTAX Q 02 Standard Zoom 5-15mm F2.8-4.5 ED AL [IF]',
-					images: [
-						'img/smc PENTAX Q 02 Standard Zoom 5-15mm F2.8-4.5 ED AL [IF].png',
-					],
+					images: ['smc PENTAX Q 02 Standard Zoom 5-15mm F2.8-4.5 ED AL [IF]'],
 				},
 				{
 					title: 'Hasselblad XCD 35-75mm f/3.5-4.5',
-					images: ['img/Hasselblad XCD 35-75mm f-3.5-4.5.png'],
+					images: ['Hasselblad XCD 35-75mm f-3.5-4.5'],
 				},
 				{
 					title: 'Hasselblad XCD 45mm f/3.5',
-					images: ['img/Hasselblad XCD 45mm f-3.5.png'],
+					images: ['Hasselblad XCD 45mm f-3.5'],
 				},
 				{
 					title: 'Hasselblad XCD 30mm f/3.5',
-					images: ['img/Hasselblad XCD 30mm f-3.5.png'],
+					images: ['Hasselblad XCD 30mm f-3.5'],
 				},
 				{
 					title: 'Canon RF 600mm F11 IS STM',
-					images: ['img/Canon RF 600mm F11 IS STM.png'],
+					images: ['Canon RF 600mm F11 IS STM'],
 				},
 				{
 					title: 'Hasselblad 907X camera body',
-					images: ['img/Hasselblad 907X camera body.png'],
+					images: ['Hasselblad 907X camera body'],
 				},
 				{
 					title: 'Hasselblad X1D (X1D-50c) camera body',
-					images: ['img/Hasselblad X1D (X1D-50c) camera body.png'],
+					images: ['Hasselblad X1D (X1D-50c) camera body'],
 				},
 				{
 					title: 'Olympus IS-5000 35mm Bridge Camera',
-					images: ['img/Olympus IS-5000 35mm Bridge Camera.png'],
+					images: ['Olympus IS-5000 35mm Bridge Camera'],
 				},
 				{
 					title: 'Canon PowerShot G10',
-					images: [
-						'img/Canon PowerShot G10.png',
-						'img/Canon PowerShot G10 (2).png',
-					],
+					images: ['Canon PowerShot G10', 'Canon PowerShot G10 (2)'],
 				},
 				{
-					title:
-						'Sony Cyber-shot digital camera (YIC variant, exact DSC-model unknown)',
+					title: 'Sony Cyber-shot digital camera (YIC variant)',
 					images: [
-						'img/Sony Cyber-shot digital camera (YIC variant, exact DSC-model unknown).png',
+						'Sony Cyber-shot digital camera (YIC variant, exact DSC-model unknown)',
 					],
 				},
 				{
 					title: 'Canon TELE CONVERTER TC-DC58C 2.0x',
-					images: ['img/Canon TELE CONVERTER TC-DC58C 2.0x.png'],
+					images: ['Canon TELE CONVERTER TC-DC58C 2.0x'],
 				},
 				{
 					title: 'Brons Wide Conversion Lens 0.42x for Sony TR',
-					images: ['img/Brons Wide Conversion Lens 0.42x for Sony TR.png'],
+					images: ['Brons Wide Conversion Lens 0.42x for Sony TR'],
 				},
 				{
-					title:
-						'Auxiliary telephoto lens for Nikon L35AF (brand/model not specified)',
+					title: 'Auxiliary telephoto lens for Nikon L35AF',
 					images: [
-						'img/Auxiliary telephoto lens for Nikon L35AF (brand-model not specified).png',
+						'Auxiliary telephoto lens for Nikon L35AF (brand-model not specified)',
 					],
 				},
 				{
-					title:
-						'Auxiliary wide-angle lens for Nikon L35AF (brand/model not specified)',
+					title: 'Auxiliary wide-angle lens for Nikon L35AF',
 					images: [
-						'img/Auxiliary wide-angle lens for Nikon L35AF (brand-model not specified).png',
+						'Auxiliary wide-angle lens for Nikon L35AF (brand-model not specified)',
 					],
 				},
 				{
 					title: 'Leica Anglefinder M (Anglefinder M, 12531)',
-					images: ['img/Leica Anglefinder M (Anglefinder M, 12531).png'],
+					images: ['Leica Anglefinder M (Anglefinder M, 12531)'],
 				},
 				{
 					title: 'Leica Summicron-M 90mm f/2 E55',
-					images: ['img/Leica Summicron-M 90mm f-2 E55.png'],
+					images: ['Leica Summicron-M 90mm f-2 E55'],
 				},
 				{
 					title: 'Leica Summilux-M 50mm f/1.4 ASPH. E46',
-					images: ['img/Leica Summilux-M 50mm f-1.4 ASPH. E46.png'],
+					images: ['Leica Summilux-M 50mm f-1.4 ASPH. E46'],
 				},
 				{
 					title: 'Leica Macro-Elmar-M 90mm f/4 E39',
-					images: ['img/Leica Macro-Elmar-M 90mm f-4 E39.png'],
+					images: ['Leica Macro-Elmar-M 90mm f-4 E39'],
 				},
 				{
 					title: 'Leica Elmarit-M 21mm f/2.8 ASPH. E55',
-					images: ['img/Leica Elmarit-M 21mm f-2.8 ASPH. E55.png'],
+					images: ['Leica Elmarit-M 21mm f-2.8 ASPH. E55'],
 				},
 				{
 					title: 'Leica Universal Polarising Filter M',
-					images: ['img/Leica Universal Polarising Filter M.png'],
+					images: ['Leica Universal Polarising Filter M'],
 				},
 				{
 					title: 'Leica E39 Adapter for Universal Polarising Filter M',
-					images: [
-						'img/Leica E39 Adapter for Universal Polarising Filter M.png',
-					],
+					images: ['Leica E39 Adapter for Universal Polarising Filter M'],
 				},
 				{
 					title: 'B+W 67mm 486 UV/IR Cut MRC Filter',
-					images: ['img/B+W 67mm 486 UV-IR Cut MRC Filter.png'],
+					images: ['B+W 67mm 486 UV-IR Cut MRC Filter'],
 				},
-				{
-					title: 'Leica UV/IR Filter E46',
-					images: ['img/Leica UV-IR Filter E46.png'],
-				},
+				{ title: 'Leica UV/IR Filter E46', images: ['Leica UV-IR Filter E46'] },
 			];
 
+			// Pre-computed flat image list
 			const allImages = inventory.flatMap((item) =>
-				item.images.map((src) => ({ src, title: item.title })),
+				item.images.map((baseName) => ({ baseName, title: item.title })),
 			);
 
-			function handleImageError(img, src) {
-				console.warn(`Missing image: ${src}`);
-				img.src = 'https://placehold.co/400x300/222/888?text=Image+Missing';
+			// Build image URLs with WebP priority
+			function getImageUrl(baseName, type) {
+				const encoded = encodeURIComponent(baseName);
+				switch (type) {
+					case 'thumb':
+						return `img/webp/${encoded}-thumb.webp`;
+					case '1200':
+						return `img/webp/${encoded}-1200.webp`;
+					case 'full':
+						return `img/webp/${encoded}-full.webp`;
+					default:
+						return `img/${encoded}.png`;
+				}
 			}
 
+			// Intersection Observer for lazy loading
+			const imgObserver = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							const img = entry.target;
+							const src = img.dataset.src;
+							if (src) {
+								img.src = src;
+								img.removeAttribute('data-src');
+								img.onload = () => img.classList.add('loaded');
+								imgObserver.unobserve(img);
+							}
+						}
+					});
+				},
+				{ rootMargin: '50px' },
+			);
+
+			// Handle image loading errors
+			function handleImageError(img) {
+				img.src =
+					'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect width="400" height="300" fill="%23222"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%23888" font-family="sans-serif" font-size="14"%3EImage Missing%3C/text%3E%3C/svg%3E';
+				img.classList.add('loaded');
+			}
+
+			// Render views with lazy loading
 			function renderViews() {
 				const tbody = document.getElementById('inventory-tbody');
 				const gridContainer = document.getElementById('grid-container');
@@ -262,78 +636,103 @@
 
 				inventory.forEach((item) => {
 					const thumbnails = item.images
-						.map((src) => {
+						.map((baseName) => {
 							const idx = globalImgIndex++;
-							const encodedSrc = encodeURI(src);
+							const thumbUrl = getImageUrl(baseName, 'thumb');
+							const fullPng = `img/${encodeURIComponent(baseName)}.png`;
 
-							gridItems += `
-                        <div onclick="openLightbox(${idx})" class="group relative cursor-pointer">
-                            <img class="h-auto max-w-full rounded-lg shadow-sm group-hover:shadow-md transition-shadow bg-gray-800" 
-                                 src="${encodedSrc}" alt="${item.title}" onerror="handleImageError(this, '${src}')">
-                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-end p-4">
-                                <p class="text-white text-xs font-medium truncate">${item.title}</p>
-                            </div>
-                        </div>`;
+							// Grid item (uses tiny WebP thumbnail)
+							gridItems += `<div onclick="openLightbox(${idx})" class="grid-item">
+							<img data-src="${thumbUrl}" alt="${item.title}" class="img-fade" onerror="handleImageError(this)" decoding="async">
+							<div class="grid-overlay">
+								<p style="color: rgb(255, 255, 255); font-size: 0.875rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%;">${item.title}</p>
+							</div>
+						</div>`;
 
-							return `
-                        <div onclick="openLightbox(${idx})" class="w-48 h-32 rounded-xl overflow-hidden border border-gray-700 cursor-pointer hover:scale-105 hover:border-gray-400 transition-all duration-300 bg-black">
-                            <img src="${encodedSrc}" class="w-full h-full object-cover" onerror="handleImageError(this, '${src}')">
-                        </div>`;
+							// Table thumbnail
+							return `<div onclick="openLightbox(${idx})" class="thumbnail">
+							<img data-src="${thumbUrl}" alt="${item.title}" class="img-fade" onerror="handleImageError(this)" loading="lazy" decoding="async">
+						</div>`;
 						})
 						.join('');
 
-					tableRows += `
-                    <tr class="hover:bg-[#1a1a1a] transition-colors border-b border-gray-800">
-                        <td class="py-8 px-6 align-middle"><div class="flex gap-4 flex-wrap">${thumbnails}</div></td>
-                        <td class="py-8 px-6 align-middle"><span class="text-xl font-bold text-white tracking-tight">${item.title}</span></td>
-                    </tr>`;
+					tableRows += `<tr class="inventory-row" style="border-bottom: 1px solid rgb(31, 41, 55);">
+						<td style="padding: 1.5rem;"><div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">${thumbnails}</div></td>
+						<td style="padding: 1.5rem;"><span style="font-size: 1.125rem; font-weight: 600; color: rgb(255, 255, 255);">${item.title}</span></td>
+					</tr>`;
 				});
 
 				tbody.innerHTML = tableRows;
 				gridContainer.innerHTML = gridItems;
+
+				// Observe all lazy images
+				document
+					.querySelectorAll('img[data-src]')
+					.forEach((img) => imgObserver.observe(img));
 			}
 
+			// View switching
 			window.setView = function (view) {
 				const isTable = view === 'table';
-				document
-					.getElementById('table-view')
-					.classList.toggle('hidden', !isTable);
-				document
-					.getElementById('grid-view')
-					.classList.toggle('hidden', isTable);
-				const active = 'bg-gray-700 text-white';
-				const inactive = 'text-gray-400 hover:text-gray-200';
 				document.getElementById('table-toggle').className =
-					`px-4 py-2 text-sm font-medium rounded-md transition-all ${isTable ? active : inactive}`;
+					`table-toggle ${isTable ? 'table-toggle-active' : 'table-toggle-inactive'}`;
 				document.getElementById('grid-toggle').className =
-					`px-4 py-2 text-sm font-medium rounded-md transition-all ${!isTable ? active : inactive}`;
+					`table-toggle ${!isTable ? 'table-toggle-active' : 'table-toggle-inactive'}`;
+				document.getElementById('table-view').style.display =
+					isTable ? 'block' : 'none';
+				document.getElementById('grid-view').style.display =
+					isTable ? 'none' : 'grid';
 			};
 
+			// Lightbox
 			let currentIdx = 0;
 			const lightbox = document.getElementById('lightbox');
 			const lightboxImg = document.getElementById('lightbox-img');
 			const captionTitle = document.getElementById('caption-title');
 			const prevBtn = document.getElementById('prev-btn');
 			const nextBtn = document.getElementById('next-btn');
+			const spinner = document.getElementById('lightbox-spinner');
 
 			window.openLightbox = function (index) {
 				currentIdx = index;
 				updateLightbox();
-				lightbox.classList.replace('hidden', 'flex');
+				lightbox.style.display = 'block';
+				requestAnimationFrame(() => (lightbox.style.opacity = '1'));
 				document.body.style.overflow = 'hidden';
 			};
 
 			window.closeLightbox = function () {
-				lightbox.classList.replace('flex', 'hidden');
+				lightbox.style.opacity = '0';
+				setTimeout(() => {
+					lightbox.style.display = 'none';
+					lightboxImg.style.opacity = '0';
+					lightboxImg.src = '';
+				}, 200);
 				document.body.style.overflow = '';
 			};
 
 			function updateLightbox() {
-				const { src, title } = allImages[currentIdx];
-				lightboxImg.src = encodeURI(src);
+				const { baseName, title } = allImages[currentIdx];
+				const imageUrl = getImageUrl(baseName, '1200');
+
+				lightboxImg.style.opacity = '0';
+				spinner.style.display = 'flex';
 				captionTitle.textContent = title;
 				prevBtn.disabled = currentIdx === 0;
 				nextBtn.disabled = currentIdx === allImages.length - 1;
+
+				// Preload and show
+				const preloadImg = new Image();
+				preloadImg.onload = () => {
+					lightboxImg.src = imageUrl;
+					spinner.style.display = 'none';
+					lightboxImg.style.opacity = '1';
+				};
+				preloadImg.onerror = () => {
+					spinner.style.display = 'none';
+					handleImageError(lightboxImg);
+				};
+				preloadImg.src = imageUrl;
 			}
 
 			window.changeImage = function (step) {
@@ -344,14 +743,15 @@
 				}
 			};
 
+			// Keyboard navigation
 			document.addEventListener('keydown', (e) => {
-				if (lightbox.classList.contains('flex')) {
-					if (e.key === 'Escape') window.closeLightbox();
-					if (e.key === 'ArrowRight') window.changeImage(1);
-					if (e.key === 'ArrowLeft') window.changeImage(-1);
-				}
+				if (lightbox.style.display === 'none') return;
+				if (e.key === 'Escape') closeLightbox();
+				if (e.key === 'ArrowRight') changeImage(1);
+				if (e.key === 'ArrowLeft') changeImage(-1);
 			});
 
+			// Initialize
 			renderViews();
 		</script>
 	</body>

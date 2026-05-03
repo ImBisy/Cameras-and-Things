@@ -1,0 +1,9 @@
+# Large original images - use WebP versions instead
+img/*.png
+img/thumbs/*.png
+
+# macOS
+.DS_Store
+
+# Node modules (if you add them later)
+node_modules/
