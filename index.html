@@ -376,14 +376,16 @@
 			"
 			onclick="if (event.target === this) closeLightbox();"
 		>
-			<button type="button"
+			<button
+				type="button"
 				class="lightbox-close"
 				onclick="closeLightbox()"
 				aria-label="Close"
 			>
 				&times;
 			</button>
-			<button type="button"
+			<button
+				type="button"
 				id="prev-btn"
 				class="lightbox-btn"
 				onclick="changeImage(-1)"
@@ -391,7 +393,8 @@
 			>
 				&#10094;
 			</button>
-			<button type="button"
+			<button
+				type="button"
 				id="next-btn"
 				class="lightbox-btn"
 				onclick="changeImage(1)"
@@ -729,7 +732,89 @@
 					title: 'Hähnel PowerStation Ultima',
 					images: ['Hähnel PowerStation Ultima'],
 				},
+				{
+					title: 'Camer PT 2',
+					images: ['Camer PT 2'],
+				},
+				{
+					title: 'Olympus Stylus 7000 (µ 7000)',
+					images: ['Olympus Stylus 7000 (µ 7000)'],
+				},
+				{
+					title: 'Leica APO-Vario-Elmarit-SL 90-280mm f/2.8-4',
+					images: ['Leica APO-Vario-Elmarit-SL 90-280mm f-2.8-4'],
+				},
+				{
+					title: 'Leica Tri-Elmar-M 1:4 / 28-35-50mm ASPH',
+					images: ['Leica Tri-Elmar-M 1-4 - 28-35-50mm ASPH'],
+				},
+				{
+					title: 'Leica 12585 Metal Lens Hood',
+					images: ['Leica 12585 Metal Lens Hood'],
+				},
+				{
+					title: 'Olympus BLH-1 Lithium-Ion Battery',
+					images: ['Olympus BLH-1 Lithium-Ion Battery'],
+				},
+				{
+					title: 'Casio Exilim EX-H10 digital camera.',
+					images: ['Casio Exilim EX-H10 digital camera'],
+				},
+				{
+					title: 'Sony Cyber-shot Station Dock',
+					images: ['Sony Cyber-shot Station Dock'],
+				},
+				{
+					title: 'Leica Elmarit-M 135mm f/2.8',
+					images: ['Leica Elmarit-M 135mm f-2.8'],
+				},
+				{
+					title:
+						'Sony Cyber-shot RX100 III with Genuine Sony LCJ-RXF Leather Case',
+					images: [
+						'Sony Cyber-shot RX100 III with Genuine Sony LCJ-RXF Leather Case',
+					],
+				},
+				{
+					title: 'Leica M',
+					images: ['Leica M'],
+				},
+				{
+					title: 'Leica Vario-Elmarit-SL 24-90mm f/2.8-4 ASPH',
+					images: ['Leica Vario-Elmarit-SL 24-90mm f-2.8-4 ASPH'],
+				},
+				{
+					title: 'Leica SL (Typ 601)',
+					images: ['Leica SL (Typ 601)'],
+				},
+				{
+					title: 'Leica M Monochrom (Typ 246)',
+					images: ['Leica M Monochrom (Typ 246)'],
+				},
 			];
+
+			function getCompanyName(title) {
+				if (/^smc\s+PENTAX/i.test(title) || /^PENTAX/i.test(title)) {
+					return 'PENTAX';
+				}
+				if (/^Auxiliary .* Nikon/i.test(title)) return 'Nikon';
+				if (/^Cannon\b/i.test(title)) return 'Canon';
+				return title.split(' ')[0];
+			}
+
+			inventory.sort((firstItem, secondItem) => {
+				const companyOrder = getCompanyName(firstItem.title).localeCompare(
+					getCompanyName(secondItem.title),
+					'en',
+					{ sensitivity: 'base' },
+				);
+				return (
+					companyOrder ||
+					firstItem.title.localeCompare(secondItem.title, 'en', {
+						sensitivity: 'base',
+					})
+				);
+			});
 
 			// Pre-computed flat image list
 			const allImages = inventory.flatMap((item) =>
