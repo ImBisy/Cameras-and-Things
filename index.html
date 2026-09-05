@@ -8,8 +8,7 @@
 			content="Professional camera equipment inventory"
 		/>
 		<title>Cameras and Accessories</title>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-			<style>
+		<style>
 			* {
 				box-sizing: border-box;
 				margin: 0;
@@ -280,7 +279,7 @@
 						Grid
 					</button>
 					<button
-						id="download-all-btn"
+						onclick="downloadAllImagesAsZip()"
 						style="
 							padding: 0.5rem 1rem;
 							font-size: 0.875rem;
@@ -292,7 +291,6 @@
 							background-color: rgb(31, 41, 55);
 							color: rgb(255, 255, 255);
 						"
-						onclick="downloadAllImagesAsZip()"
 					>
 						Download All
 					</button>
@@ -1006,52 +1004,12 @@
 
 // Download all images as zip
 			window.downloadAllImagesAsZip = async function () {
-				const zip = new JSZip();
-				// Pre-count titles to avoid race conditions with concurrent promises
-				const titleCounts = {};
-				allImages.forEach(({ title }) => {
-					const safeTitle = title.replace(/[/\\?%*:|"<>]/g, '_');
-					titleCounts[safeTitle] = (titleCounts[safeTitle] || 0) + 1;
-				});
-				// Fetch images - works when served via HTTP local server
-				try {
-					const fullImagePromises = allImages.map(async ({ baseName, title }) => {
-						const safeTitle = title.replace(/[/\\?%*:|"<>]/g, '_');
-						const totalCount = titleCounts[safeTitle];
-						const suffix = totalCount > 1 ? `-${totalCount}` : '';
-						const pngUrl = `img/${encodeURIComponent(baseName)}.png`;
-						const response = await fetch(pngUrl);
-						if (!response.ok) throw new Error(`Failed to fetch ${pngUrl}`);
-						const blob = await response.blob();
-						zip.file(`${safeTitle}${suffix}.png`, blob);
-					});
-					await Promise.all(fullImagePromises);
-					const content = await zip.generateAsync({ type: 'blob' });
-					const link = document.createElement('a');
-					link.href = URL.createObjectURL(content);
-					link.download = 'cameras-and-accessories-images.zip';
-					document.body.appendChild(link);
-					link.click();
-					document.body.removeChild(link);
-				} catch (error) {
-					// Fallback: if fetch fails (e.g., file:// protocol CORS),
-					// provide instructions for local server
-					console.error('Download failed:', error);
-					alert('To download images, please run a local HTTP server.\n' +
-						'e.g., `python -m http.server` in the project folder, then open http://localhost:8000');
-					// Create a minimal zip with info about the images
-					const info = `Cameras and Accessories Inventory\n${allImages.length} items\n\n` +
-						allImages.slice(0, 10).map((item, i) => `${i + 1}. ${item.title}`).join('\n') +
-						'\n... and ' + (allImages.length - 10) + ' more items.\n\n' +
-						'Run a local HTTP server to enable image downloads.';
-					const blob = new Blob([info], { type: 'text/plain' });
-					const link = document.createElement('a');
-					link.href = URL.createObjectURL(blob);
-					link.download = 'cameras-and-accessories-images-info.txt';
-					document.body.appendChild(link);
-					link.click();
-					document.body.removeChild(link);
-				}
+				const link = document.createElement('a');
+				link.href = 'Cameras.zip';
+				link.download = 'Cameras.zip';
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
 			};
 		</script>
 	</body>
