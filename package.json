@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"dev": "python3 -m http.server",
 		"build": "npx @tailwindcss/cli -i ./src/input.css -o ./output.css",
 		"build:production": "npx @tailwindcss/cli -i ./src/input.css -o ./output.css --minify",
 		"watch": "npx @tailwindcss/cli -i ./src/input.css -o ./output.css --watch",
